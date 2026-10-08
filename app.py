@@ -85,7 +85,13 @@ try:
 
     response.raise_for_status()
 
-    data = response.json()
+data = response.json()
+    from datetime import datetime
+
+st.info(
+    f"🕒 Terakhir mengambil data dari USGS: "
+    f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}"
+)
 
 except requests.exceptions.ConnectionError:
 
