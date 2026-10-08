@@ -3,6 +3,7 @@ import requests
 import pandas as pd
 import plotly.graph_objects as go
 from streamlit_autorefresh import st_autorefresh
+from datetime import datetime
 
 # ==========================================
 # KONFIGURASI HALAMAN
@@ -14,6 +15,12 @@ st.set_page_config(
     layout="wide"
 )
 
+st.title("🌋 Dashboard Gempa Terkini")
+
+st.info(
+    f"🕒 Data diperiksa: "
+    f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}"
+)
 # ==========================================
 # AUTO UPDATE SETIAP 60 DETIK
 # ==========================================
@@ -65,66 +72,41 @@ url = (
     "earthquakes/feed/v1.0/summary/all_day.geojson"
 )
 
-# ==========================================
-# MENGAMBIL DATA API
-# ==========================================
-
 try:
-
     response = requests.get(
         url,
         timeout=30,
         headers={
-            "User-Agent": "Mozilla/5.0 "
-                          "(Windows NT 10.0; Win64; x64) "
-                          "AppleWebKit/537.36 "
-                          "(KHTML, like Gecko) "
-                          "Chrome/154.0 Safari/537.36"
+            "User-Agent": "Mozilla/5.0"
         }
     )
 
     response.raise_for_status()
 
     data = response.json()
-    from datetime import datetime
-
-st.info(
-    f"🕒 Terakhir mengambil data dari USGS: "
-    f"{datetime.now().strftime('%d-%m-%Y %H:%M:%S')}"
-)
 
 except requests.exceptions.ConnectionError:
-
     st.error(
-        "❌ Koneksi ke server USGS gagal. "
-        "Coba jalankan kembali beberapa saat lagi."
+        "❌ Koneksi ke server USGS gagal."
     )
-
     st.stop()
 
 except requests.exceptions.Timeout:
-
     st.error(
-        "⏳ Server USGS terlalu lama merespons. "
-        "Silakan coba refresh."
+        "⏳ Server USGS terlalu lama merespons."
     )
-
     st.stop()
 
 except requests.exceptions.RequestException as e:
-
     st.error(
-        f"❌ Terjadi masalah saat mengambil data USGS:\n\n{e}"
+        f"❌ Gagal mengambil data USGS: {e}"
     )
-
     st.stop()
 
 except ValueError:
-
     st.error(
-        "❌ Data yang diterima dari USGS bukan format JSON yang valid."
+        "❌ Data dari USGS tidak dapat dibaca sebagai JSON."
     )
-
     st.stop()
 
 # ==========================================
