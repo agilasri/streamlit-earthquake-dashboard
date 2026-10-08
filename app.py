@@ -154,8 +154,9 @@ if df.empty:
 df["waktu"] = pd.to_datetime(
     df["waktu"],
     unit="ms",
-    errors="coerce"
-)
+    errors="coerce",
+    utc=True
+).dt.tz_convert("Asia/Makassar").dt.tz_localize(None)
 
 df["magnitudo"] = pd.to_numeric(
     df["magnitudo"],
