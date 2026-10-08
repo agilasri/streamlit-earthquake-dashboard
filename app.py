@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.graph_objects as go
+from streamlit_autorefresh import st_autorefresh
 
 # ==========================================
 # KONFIGURASI HALAMAN
@@ -11,6 +12,15 @@ st.set_page_config(
     page_title="Dashboard Gempa Terkini",
     page_icon="🌋",
     layout="wide"
+)
+
+# ==========================================
+# AUTO UPDATE SETIAP 60 DETIK
+# ==========================================
+
+count = st_autorefresh(
+    interval=60 * 1000,
+    key="datarefresh"
 )
 
 # ==========================================
